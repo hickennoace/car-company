@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 1136.57687716578,
+            "y": 166.04354838272087
+          },
+          "nodeIndex": "_Measures",
+          "nodeLineageTag": "8b824312-7aeb-4bf6-8685-36607d23d650",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 334.17941566988611,
+            "y": 162.76878482938596
+          },
+          "nodeIndex": "Cars",
+          "nodeLineageTag": "1899aa0d-76ae-4b13-87cb-b0ff33859f67",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 618.37645520037063,
+            "y": 14.871234307169743
+          },
+          "nodeIndex": "Customers",
+          "nodeLineageTag": "dda0b0b3-4012-41a9-8bd3-ec44d8c2eb4d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 902.57687716577993,
+            "y": -50
+          },
+          "nodeIndex": "DimDate",
+          "nodeLineageTag": "2f2c1df4-b80b-4c59-952e-e8f0d74b270b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 334.08709676544174
+          },
+          "nodeIndex": "Potential Customers",
+          "nodeLineageTag": "6234ba73-42a4-423d-b813-b207ab0e9a5b",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1420.57687716578,
+            "y": 216.04354838272087
+          },
+          "nodeIndex": "Win-Back Rate",
+          "nodeLineageTag": "56015cf3-8632-48a2-8bb5-ada5d3bcdd97",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1704.57687716578,
+            "y": 168.04354838272087
+          },
+          "nodeIndex": "Workers",
+          "nodeLineageTag": "1b597d46-0e80-433a-83e1-f33c23e9162e",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

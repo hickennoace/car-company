@@ -1,0 +1,67 @@
+table DimDate
+	lineageTag: 2f2c1df4-b80b-4c59-952e-e8f0d74b270b
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Short Date
+		lineageTag: 5b90ce34-913e-4749-ba64-3d8ba5189e4c
+		dataCategory: PaddedDateTableDates
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 3b874949-1163-44e3-a495-d508807d9dc8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month No'
+		dataType: int64
+		formatString: 0
+		lineageTag: edce5108-91ca-4cce-b275-edea34482d8a
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month No]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Month Name'
+		dataType: string
+		lineageTag: ceee8894-e924-465a-b0c9-04eab52710d3
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Name]
+		sortByColumn: 'Month No'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: 1bfcf45b-920b-4f20-8ad3-8a55a43474eb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Quarter]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = calculated
+		mode: import
+		source =
+				ADDCOLUMNS (
+				    CALENDAR ( DATE ( 2025, 1, 1 ), DATE ( 2025, 12, 30 ) ),
+				    "Year",       YEAR ( [Date] ),
+				    "Month No",   MONTH ( [Date] ),
+				    "Month Name", FORMAT ( [Date], "MMM" ),
+				    "Quarter",    "Q" & FORMAT ( [Date], "Q" )
+				)
+
+	annotation PBI_Id = 53db62ac2eb4438cb6ad5b4170720eff
+

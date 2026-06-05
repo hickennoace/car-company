@@ -1,0 +1,13 @@
+relationship 450a9c39-ac46-4863-a037-2543ec471777
+	fromColumn: Customers.'Model purchased'
+	toColumn: Cars.ModelFull
+
+relationship 13ebd15e-acc7-43bf-a0d2-1c7c88c93070
+	fromColumn: 'Potential Customers'.'Car they were interested in'
+	toColumn: Cars.ModelFull
+
+relationship f6cbb550-75ff-4798-b81f-7d2ab40124ff
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Customers.'Date of purchase'
+	toColumn: DimDate.Date
+

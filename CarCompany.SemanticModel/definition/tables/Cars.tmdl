@@ -1,0 +1,127 @@
+table Cars
+	lineageTag: 1899aa0d-76ae-4b13-87cb-b0ff33859f67
+
+	column Brand
+		dataType: string
+		lineageTag: 97b6d8c2-f777-41af-857e-5388581a8296
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Model
+		dataType: string
+		lineageTag: e04abbff-4011-4b0d-aee7-0cafaf40610b
+		summarizeBy: none
+		sourceColumn: Model
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Engine size'
+		dataType: string
+		lineageTag: 40a84ca8-9ec8-4295-95d7-3ef09069d761
+		summarizeBy: none
+		sourceColumn: Engine size
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Horse Power (hp)'
+		dataType: int64
+		formatString: 0
+		lineageTag: c0c7b2bf-888e-4fda-8e4a-346bb9ea174c
+		summarizeBy: none
+		sourceColumn: Horse Power (hp)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Torque (Nm)'
+		dataType: int64
+		formatString: 0
+		lineageTag: a7f779a9-c686-4674-b392-7a795a2c7dc5
+		summarizeBy: none
+		sourceColumn: Torque (Nm)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Price for the Importer'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 94c866c4-d642-42d1-8ca2-6e89ac4a47e2
+		summarizeBy: sum
+		sourceColumn: Price for the Importer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Price for the Customer'
+		dataType: int64
+		formatString: #,0
+		lineageTag: ffd2d439-e626-46cd-a3a9-ea30a4a038f8
+		summarizeBy: sum
+		sourceColumn: Price for the Customer
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'In stock'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 00d6784f-cebc-429d-a68b-2488d6f39772
+		summarizeBy: sum
+		sourceColumn: In stock
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sold (2025)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: fbbb7ce0-7e4a-4e4c-959d-59bb37cb669d
+		summarizeBy: sum
+		sourceColumn: Sold (2025)
+
+		annotation SummarizationSetBy = Automatic
+
+	column ModelFull
+		dataType: string
+		lineageTag: 9486caf9-0c57-46aa-b910-c986a91dad66
+		summarizeBy: none
+		sourceColumn: ModelFull
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Clean profit (per car)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: ceea09ce-401b-45f3-aff6-2b7d60c26a58
+		summarizeBy: sum
+		sourceColumn: Clean profit (per car)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total profit (2025)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 2c5edeab-0080-430d-b7c4-8ab4adb1f5d3
+		summarizeBy: sum
+		sourceColumn: Total profit (2025)
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Cars = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\danie\Desktop\Car Company\Cars.xlsx"), null, true),
+				    Data = Source{[Item="Cars",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(Data, [PromoteAllScalars=true]),
+				    Rows = Table.SelectRows(Promoted, each [Brand] <> null and [Brand] <> "TOTAL"),
+				    Dropped = Table.RemoveColumns(Rows, {"Clean profit (per car)", "Total profit (2025)"}),
+				    Typed = Table.TransformColumnTypes(Dropped, {
+				        {"Brand", type text}, {"Model", type text}, {"Engine size", type text},
+				        {"Horse Power (hp)", Int64.Type}, {"Torque (Nm)", Int64.Type},
+				        {"Price for the Importer", Int64.Type}, {"Price for the Customer", Int64.Type},
+				        {"In stock", Int64.Type}, {"Sold (2025)", Int64.Type} }),
+				    ModelFull = Table.AddColumn(Typed, "ModelFull", each [Brand] & " " & [Model], type text),
+				    Profit = Table.AddColumn(ModelFull, "Clean profit (per car)", each [#"Price for the Customer"] - [#"Price for the Importer"], Int64.Type),
+				    Final = Table.AddColumn(Profit, "Total profit (2025)", each [#"Clean profit (per car)"] * [#"Sold (2025)"], Int64.Type)
+				in
+				    Final
+

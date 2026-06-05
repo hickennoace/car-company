@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/pagesMetadata/1.1.0/schema.json",
+  "pageOrder": [
+    "page_sales_2025",
+    "page_revenue_2025",
+    "page_inventory_2025",
+    "page_segments_2025",
+    "page_pipeline_2025"
+  ],
+  "activePageName": "page_sales_2025"
+}

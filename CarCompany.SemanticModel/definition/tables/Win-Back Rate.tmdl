@@ -1,0 +1,18 @@
+table 'Win-Back Rate'
+	lineageTag: 56015cf3-8632-48a2-8bb5-ada5d3bcdd97
+
+	column 'Win-Back Rate'
+		dataType: double
+		formatString: 0%
+		lineageTag: 26048de9-50c0-4650-9c46-ac7353605d2c
+		summarizeBy: none
+		sourceColumn: [Value]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Win-Back Rate' = calculated
+		mode: import
+		source = GENERATESERIES(0, 1, 0.05)
+
+	annotation PBI_Id = 4be39d3b31864ba996cf7215e6b7b816
+

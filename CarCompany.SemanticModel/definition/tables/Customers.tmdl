@@ -1,0 +1,112 @@
+table Customers
+	lineageTag: dda0b0b3-4012-41a9-8bd3-ec44d8c2eb4d
+
+	column 'Date of purchase'
+		dataType: dateTime
+		lineageTag: c7337940-4292-42f8-85e1-300b9e83192b
+		summarizeBy: none
+		sourceColumn: Date of purchase
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		dataType: string
+		lineageTag: 855b137f-05be-4218-9548-283afe6e0d02
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sex
+		dataType: string
+		lineageTag: c2d12e54-4d04-4f75-9e0e-96ea7f1d0657
+		summarizeBy: none
+		sourceColumn: Sex
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: 83affcf3-1500-4e49-b295-010b591e5c47
+		summarizeBy: none
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column Phone
+		dataType: string
+		lineageTag: 8c1ac76b-7920-4b7d-9a8c-d4fa4a038bdb
+		summarizeBy: none
+		sourceColumn: Phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Model purchased'
+		dataType: string
+		lineageTag: 29ff0d8b-6f30-40e8-9c8a-ebf001476365
+		summarizeBy: none
+		sourceColumn: Model purchased
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'How much paid'
+		dataType: int64
+		formatString: #,0
+		lineageTag: cc8507c7-b310-4cdf-a256-c286303ad498
+		summarizeBy: sum
+		sourceColumn: How much paid
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Discount applied'
+		dataType: string
+		lineageTag: 0e7a5347-ba35-4f65-bcb6-9104deec3b97
+		summarizeBy: none
+		sourceColumn: Discount applied
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reason of purchase'
+		dataType: string
+		lineageTag: f23b9f94-7f40-46d1-8a6c-53449a2bf1e8
+		summarizeBy: none
+		sourceColumn: Reason of purchase
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age band'
+		dataType: string
+		lineageTag: da9c13f4-6306-4052-abb7-f1300399c994
+		summarizeBy: none
+		sourceColumn: Age band
+		sortByColumn: 'Age band no'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Age band no'
+		dataType: int64
+		formatString: 0
+		lineageTag: 58474652-52bd-40f9-96f0-b7ff6729b853
+		summarizeBy: none
+		sourceColumn: Age band no
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customers = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\danie\Desktop\Car Company\Customers.xlsx"), null, true),
+				    Data = Source{[Item="Customers 2025",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(Data, [PromoteAllScalars=true]),
+				    Rows = Table.SelectRows(Promoted, each [Name] <> null),
+				    Typed = Table.TransformColumnTypes(Rows, {
+				        {"Date of purchase", type datetime}, {"Name", type text}, {"Sex", type text},
+				        {"Age", Int64.Type}, {"Phone", type text}, {"Model purchased", type text},
+				        {"How much paid", Int64.Type}, {"Discount applied", type text}, {"Reason of purchase", type text} }),
+				    Band = Table.AddColumn(Typed, "Age band", each if [Age] < 30 then "Under 30" else if [Age] < 40 then "30-39" else if [Age] < 50 then "40-49" else if [Age] < 60 then "50-59" else "60+", type text),
+				    Final = Table.AddColumn(Band, "Age band no", each if [Age] < 30 then 1 else if [Age] < 40 then 2 else if [Age] < 50 then 3 else if [Age] < 60 then 4 else 5, Int64.Type)
+				in
+				    Final
+

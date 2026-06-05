@@ -1,0 +1,97 @@
+table Workers
+	lineageTag: 1b597d46-0e80-433a-83e1-f33c23e9162e
+
+	column Name
+		dataType: string
+		lineageTag: 99e05e74-46d3-4303-936e-cfc1590fefa0
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sex
+		dataType: string
+		lineageTag: a7dd22f8-24a1-4f62-b02e-343bec3e5225
+		summarizeBy: none
+		sourceColumn: Sex
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: fb75fe65-379d-42b4-a81c-8f7ffcf1ec24
+		summarizeBy: none
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column Phone
+		dataType: string
+		lineageTag: 2bf04db1-ae72-4725-bd70-13554f33ec15
+		summarizeBy: none
+		sourceColumn: Phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department
+		dataType: string
+		lineageTag: de5581c0-c8b8-42b7-93c7-b69748953c15
+		summarizeBy: none
+		sourceColumn: Department
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Seniority (years)'
+		dataType: int64
+		formatString: 0
+		lineageTag: 86933a61-0204-44e5-a6cb-725b2a7e9ba3
+		summarizeBy: none
+		sourceColumn: Seniority (years)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Salary (monthly)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 24bdf7fd-9911-4e82-a81c-ac13673baecd
+		summarizeBy: sum
+		sourceColumn: Salary (monthly)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Bonuses (annual)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7314a785-69c4-48f6-b98e-d416f17877ba
+		summarizeBy: sum
+		sourceColumn: Bonuses (annual)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Total paid (year)'
+		dataType: int64
+		formatString: #,0
+		lineageTag: 7c48f973-97af-419b-bb57-c7ae2ede87d5
+		summarizeBy: sum
+		sourceColumn: Total paid (year)
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Workers = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\danie\Desktop\Car Company\Workers.xlsx"), null, true),
+				    Data = Source{[Item="Workers",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(Data, [PromoteAllScalars=true]),
+				    Rows = Table.SelectRows(Promoted, each [Name] <> null),
+				    Dropped = Table.RemoveColumns(Rows, {"Total paid (year)"}),
+				    Typed = Table.TransformColumnTypes(Dropped, {
+				        {"Name", type text}, {"Sex", type text}, {"Age", Int64.Type}, {"Phone", type text},
+				        {"Department", type text}, {"Seniority (years)", Int64.Type},
+				        {"Salary (monthly)", Int64.Type}, {"Bonuses (annual)", Int64.Type} }),
+				    Final = Table.AddColumn(Typed, "Total paid (year)", each [#"Salary (monthly)"] * 12 + [#"Bonuses (annual)"], Int64.Type)
+				in
+				    Final
+

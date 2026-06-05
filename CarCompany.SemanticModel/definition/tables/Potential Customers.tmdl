@@ -1,0 +1,76 @@
+table 'Potential Customers'
+	lineageTag: 6234ba73-42a4-423d-b813-b207ab0e9a5b
+
+	column Name
+		dataType: string
+		lineageTag: b6e5a0a2-bb45-4dfc-93cf-a67e0e73f059
+		summarizeBy: none
+		sourceColumn: Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Age
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d22a72b-1e1c-4c20-9485-60f386f597bd
+		summarizeBy: none
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+	column Sex
+		dataType: string
+		lineageTag: 082cd913-7b7f-4a3c-a5e4-e9dbd9c2718c
+		summarizeBy: none
+		sourceColumn: Sex
+
+		annotation SummarizationSetBy = Automatic
+
+	column Phone
+		dataType: string
+		lineageTag: ab391844-935d-4da4-ac09-b0608ada8252
+		summarizeBy: none
+		sourceColumn: Phone
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Car they were interested in'
+		dataType: string
+		lineageTag: 4c5d0a3b-483a-461f-a95e-017c65d9654e
+		summarizeBy: none
+		sourceColumn: Car they were interested in
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Price of car'
+		dataType: int64
+		formatString: #,0
+		lineageTag: da118b44-cf21-45d1-a0da-ca6b9f4afc3f
+		summarizeBy: sum
+		sourceColumn: Price of car
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reason why they didn''t progress'
+		dataType: string
+		lineageTag: ddde2180-4db4-4df6-ab19-3b2ce730b78d
+		summarizeBy: none
+		sourceColumn: Reason why they didn't progress
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Potential Customers' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\danie\Desktop\Car Company\Potential Customers.xlsx"), null, true),
+				    Data = Source{[Item="Potential customers",Kind="Sheet"]}[Data],
+				    Promoted = Table.PromoteHeaders(Data, [PromoteAllScalars=true]),
+				    Rows = Table.SelectRows(Promoted, each [Name] <> null),
+				    Final = Table.TransformColumnTypes(Rows, {
+				        {"Name", type text}, {"Age", Int64.Type}, {"Sex", type text}, {"Phone", type text},
+				        {"Car they were interested in", type text}, {"Price of car", Int64.Type},
+				        {"Reason why they didn't progress", type text} })
+				in
+				    Final
+

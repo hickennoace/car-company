@@ -1,0 +1,141 @@
+table _Measures
+	lineageTag: 8b824312-7aeb-4bf6-8685-36607d23d650
+
+	measure 'Total Customers' = COUNTROWS ( Customers )
+		formatString: #,0
+		lineageTag: 9f8cf1b3-6513-41c4-af1c-19a26b34ad00
+
+	measure 'Units Sold' = COUNTROWS ( Customers )
+		formatString: #,0
+		lineageTag: 31687308-967b-4829-8ea4-134d0adb0dde
+
+	measure 'Total Revenue' = SUM ( Customers[How much paid] )
+		formatString: #,0
+		lineageTag: 2998b169-02e1-4fe1-8762-b41d40180cec
+
+	measure 'Avg Price Paid' = AVERAGE ( Customers[How much paid] )
+		formatString: #,0
+		lineageTag: 35b6deff-96e5-4fcb-a5c6-b8ccfb6674a4
+
+	measure 'Total Importer Cost' = SUMX ( Customers, RELATED ( Cars[Price for the Importer] ) )
+		formatString: #,0
+		lineageTag: 97df6283-3139-4e09-a350-61f45957c845
+
+	measure 'Realized Profit' = [Total Revenue] - [Total Importer Cost]
+		formatString: #,0
+		lineageTag: b4e36b8b-eab8-4595-bdf9-fab9d6fc9338
+
+	measure 'Realized Margin %' = DIVIDE ( [Realized Profit], [Total Revenue] )
+		formatString: 0.0%
+		lineageTag: 30c021b9-902e-4c2a-9e03-b5089ab0c36f
+
+	measure 'Avg Profit per Sale' = DIVIDE ( [Realized Profit], [Units Sold] )
+		formatString: #,0
+		lineageTag: 0ea1096f-9e04-49b5-b0e0-bc879e72dd52
+
+	measure 'Discounted Sales' = CALCULATE ( [Units Sold], Customers[Discount applied] <> "—" )
+		formatString: #,0
+		lineageTag: 6006c1fc-d6a0-4f8a-866a-cb8785b27362
+
+	measure 'Discounted Sales %' = DIVIDE ( [Discounted Sales], [Units Sold] )
+		formatString: 0.0%
+		lineageTag: 27ca1702-3990-4b86-a18d-22d0db49d4d8
+
+	measure 'Total In Stock' = SUM ( Cars[In stock] )
+		formatString: #,0
+		lineageTag: fdb02b7b-ed4d-4e6c-bf8e-fe08e56dabd5
+
+	measure 'Models Offered' = COUNTROWS ( Cars )
+		formatString: #,0
+		lineageTag: c0409da0-1a7f-4ed6-83d4-a210397133f1
+
+	measure 'Potential Customers' = COUNTROWS ( 'Potential Customers' )
+		formatString: #,0
+		lineageTag: 6f9d7ae3-cfd0-4718-b485-f3339fa3dc02
+
+	measure 'Lost Pipeline Value' = SUM ( 'Potential Customers'[Price of car] )
+		formatString: #,0
+		lineageTag: b166c85a-28c7-41d3-9920-69cbd8010e48
+
+	measure 'Conversion Rate' = DIVIDE ( [Total Customers], [Total Customers] + [Potential Customers] )
+		formatString: 0.0%
+		lineageTag: bcc56e79-d383-42d9-85ad-c96ab401d425
+
+	measure Headcount = COUNTROWS ( Workers )
+		formatString: #,0
+		lineageTag: b17d86ec-4d00-4b0e-abf8-729e2986ed57
+
+	measure 'Avg Monthly Salary' = AVERAGE ( Workers[Salary (monthly)] )
+		formatString: #,0
+		lineageTag: 48a5c3bb-2f20-4aab-ac48-6a792e312738
+
+	measure 'Total Annual Payroll' = SUMX ( Workers, Workers[Salary (monthly)] * 12 + Workers[Bonuses (annual)] )
+		formatString: #,0
+		lineageTag: f603aec1-1613-4b09-822f-f59456ccc81f
+
+	measure 'Total Sold (Cars)' = SUM ( Cars[Sold (2025)] )
+		formatString: #,0
+		lineageTag: bd381d5a-ca43-4fb4-ac5c-0e448b88671e
+
+	measure 'Total List Profit' = SUM ( Cars[Total profit (2025)] )
+		formatString: #,0
+		lineageTag: 99b199e0-a468-4b09-aeff-526e26ea84e6
+
+	measure 'List Price Total' = SUMX ( Customers, RELATED ( Cars[Price for the Customer] ) )
+		formatString: #,0
+		lineageTag: 3d5aebf5-df59-436a-a4c4-0778d69f6648
+
+	measure 'Price Realization %' = DIVIDE ( [Total Revenue], [List Price Total] )
+		formatString: 0.0%
+		lineageTag: 8daaf5a6-d8e2-4b4b-b868-fba1556cee9f
+
+	measure 'Revenue Leakage' = [List Price Total] - [Total Revenue]
+		formatString: #,0
+		lineageTag: f2488651-4f57-4198-a829-a2e0203b617c
+
+	measure 'Sell-Through Rate' = DIVIDE ( SUM ( Cars[Sold (2025)] ), SUM ( Cars[Sold (2025)] ) + SUM ( Cars[In stock] ) )
+		formatString: 0.0%
+		lineageTag: 5435b178-2efc-4ad5-8f0d-e880e15aa7ff
+
+	measure 'Revenue per Sales Rep' = DIVIDE ( [Total Revenue], CALCULATE ( COUNTROWS ( Workers ), Workers[Department] = "Sales" ) )
+		formatString: #,0
+		lineageTag: 2e1bed63-538c-4d4d-b067-732b454630c6
+
+	measure 'Win-Back Rate Value' = SELECTEDVALUE ( 'Win-Back Rate'[Win-Back Rate], 0.25 )
+		formatString: 0%
+		lineageTag: cf5d7222-f41d-42bf-b7f0-431703c2a227
+
+	measure 'Win-Back Revenue' = [Lost Pipeline Value] * [Win-Back Rate Value]
+		formatString: #,0
+		lineageTag: fd1c0d42-99fc-4a8d-bb17-9729203aedba
+
+	measure 'Supply-Lost Revenue' = CALCULATE ( [Lost Pipeline Value], 'Potential Customers'[Reason why they didn't progress] IN { "Colour / spec unavailable", "Long delivery time" } )
+		formatString: #,0
+		lineageTag: 2f5e20a9-7c6a-4779-b33a-6e74a49ecb91
+
+	measure 'Price-Lost Revenue' = CALCULATE ( [Lost Pipeline Value], 'Potential Customers'[Reason why they didn't progress] = "Price too high" )
+		formatString: #,0
+		lineageTag: 0d79b2dd-62fa-4335-b64a-c28a61170a56
+
+	measure 'Competitor-Lost Revenue' = CALCULATE ( [Lost Pipeline Value], 'Potential Customers'[Reason why they didn't progress] IN { "Chose a competitor", "Found a better deal elsewhere" } )
+		formatString: #,0
+		lineageTag: e24cd0d2-a2ae-4a12-ab3c-95e2f55d524c
+
+	measure 'Follow-up-Lost Revenue' = CALCULATE ( [Lost Pipeline Value], 'Potential Customers'[Reason why they didn't progress] IN { "Decided to wait", "Wanted a different model", "Lease terms unsatisfactory" } )
+		formatString: #,0
+		lineageTag: 8e065de0-03c9-46db-b31d-704f7dedcfa1
+
+	column Placeholder
+		dataType: string
+		isHidden
+		lineageTag: 06c482f3-2d8c-4f1b-ae50-37ade4442894
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Placeholder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _Measures = calculated
+		mode: import
+		source = ROW ( "Placeholder", BLANK () )
+
