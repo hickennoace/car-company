@@ -8,7 +8,7 @@ model Model
 
 annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["Cars","Customers","Workers","Potential Customers"]
+annotation PBI_QueryOrder = ["Cars","Customers","Workers","Potential Customers","DataFolder"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
@@ -19,8 +19,6 @@ ref table 'Potential Customers'
 ref table DimDate
 ref table 'Win-Back Rate'
 ref table _Measures
-
-ref expression DataFolder
 
 ref cultureInfo en-US
 

@@ -7,3 +7,4 @@ expression DataFolder = "C:\Users\danie\Desktop\Car Company" meta [IsParameterQu
 	annotation PBI_NavigationStepName = Navigation
 
 	annotation PBI_ResultType = Text
+

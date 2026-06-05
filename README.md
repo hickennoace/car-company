@@ -1,10 +1,10 @@
-# Car Company — Sales & Revenue Analytics (Power BI)
+# Car Company - Sales & Revenue Analytics (Power BI)
 
 An end-to-end **Power BI** analytics solution for a car dealership / importer. It turns four raw
 Excel workbooks (sales, inventory, lost leads, and staff) into a five-page interactive report that
 answers one question: **where is the revenue, and where is it leaking?**
 
-The project is built in the **PBIP (Power BI Project)** format — the report and the semantic model
+The project is built in the **PBIP (Power BI Project)** format - the report and the semantic model
 are stored as plain-text `TMDL` / `JSON` files, so the whole thing is fully version-controllable in
 git.
 
@@ -20,7 +20,7 @@ git.
 - [Report Pages](#report-pages)
 - [Data Model](#data-model)
 - [KPIs / Measures](#kpis--measures)
-- [Conclusions — How to Increase Revenue](#conclusions--how-to-increase-revenue)
+- [Conclusions - How to Increase Revenue](#conclusions--how-to-increase-revenue)
 - [Installation Guide](#installation-guide)
 - [Project Structure](#project-structure)
 
@@ -28,13 +28,50 @@ git.
 
 ## Report Pages
 
-| # | Page | What it answers |
-|---|------|-----------------|
-| 1 | **Sales & Profit** | How much did we sell, what did we earn, and which brands/models/months drove it? |
-| 2 | **Pipeline & Workforce** | How many leads converted, why we lost the rest, and how the team & payroll look. |
-| 3 | **Revenue Opportunities** | Where revenue is leaking (discounting, lost deals) and how much is recoverable. |
-| 4 | **Inventory & Demand** | What's in stock vs. sold, sell-through, and which models move. |
-| 5 | **Customer Segments** | Who buys (age, sex, reason), average spend per segment, and segment revenue. |
+The report is built around **Premium Motors**, a fictional importer dealership with **5,000 deliveries**
+in 2025 (all figures in ₪). Five pages, each answering a different question.
+
+### 1 - Sales & Profit
+The headline page: **₪2bn in total revenue**, **₪389M realized profit**, **5,000 units sold**, and a
+**20.5% realized margin**. Units-sold-by-brand shows BMW and Mercedes leading the pack with Bentley as
+the low-volume exotic, revenue is spread fairly evenly across the twelve months, and the
+realized-profit-by-model bar tells you which exact models actually make the money.
+
+![Sales & Profit page](images/page1-sales-profit.png)
+
+### 2 - Pipeline & Workforce
+Who we lost and who we employ. **2,159 leads slipped away**, giving a **69.8% conversion rate**, and
+those lost leads represent **₪814M of pipeline**. On the right, the **60-person team** is broken down
+by department (Maintenance is the biggest at 21, then Sales and Service) alongside annual payroll per
+department. The "why leads didn't progress" bar is the bridge into the next page.
+
+![Pipeline & Workforce page](images/page2-pipeline-workforce.png)
+
+### 3 - Revenue Opportunities
+The money-recovery page, and the most important one. The ₪814M of lost pipeline gets dissected into
+**addressable buckets**: **₪121M Supply-Lost** (wrong colour/spec, long delivery), **₪66M Price-Lost**,
+**₪129M Competitor-Lost**, and **₪201M Winnable-via-follow-up**. The **Win-Back Rate** slicer on the
+right lets you dial in how optimistic you want to be - at the default 25% that's **₪203M of recoverable
+revenue**. This page also surfaces **95.8% price realization** and **₪84M of revenue leakage** from
+discounting.
+
+![Revenue Opportunities page](images/page3-revenue-opportunities.png)
+
+### 4 - Inventory & Demand
+What's sitting in the warehouse vs. what's actually moving. **5,837 units in stock**, a **46.1%
+sell-through rate**, **5,000 sold**, across **23 models**. Putting units-sold and units-in-stock side
+by side instantly flags the mismatches (the 718 Cayman is overstocked relative to how it sells), and
+the "profit potential by model" bar points at where to focus.
+
+![Inventory & Demand page](images/page4-inventory-demand.png)
+
+### 5 - Customer Segments
+Who buys, and who spends. **Average price paid ₪380K**, **₪78K average profit per sale**, across
+**5,000 customers** split almost exactly 50/50 by sex. The standout pattern: **revenue climbs with
+age** - the 60+ band is the single biggest revenue contributor - and "Investment" and "Business /
+company car" top the list of purchase reasons.
+
+![Customer Segments page](images/page5-customer-segments.png)
 
 ---
 
@@ -57,8 +94,8 @@ A simple star-ish schema with four source tables, a date dimension, and a what-i
 - `Potential Customers[Car they were interested in]` → `Cars[ModelFull]`
 - `Customers[Date of purchase]` → `DimDate[Date]`
 
-Two derived columns are computed in Power Query: an **Age band** on customers (`Under 30`, `30–39`,
-`40–49`, `50–59`, `60+`) and per-car **Clean profit** = `Price for the Customer − Price for the Importer`.
+Two derived columns are computed in Power Query: an **Age band** on customers (`Under 30`, `30-39`,
+`40-49`, `50-59`, `60+`) and per-car **Clean profit** = `Price for the Customer - Price for the Importer`.
 
 ---
 
@@ -73,7 +110,7 @@ All measures live in the **`_Measures`** table. They fall into six themes.
 | **Units Sold** | `COUNTROWS(Customers)` | Volume of completed deals. |
 | **Avg Price Paid** | `AVERAGE(Customers[How much paid])` | Typical ticket size. |
 | **Total Importer Cost** | `SUMX(Customers, RELATED(Cars[Price for the Importer]))` | Cost of goods actually sold. |
-| **Realized Profit** | `Total Revenue − Total Importer Cost` | Gross profit on what we sold. |
+| **Realized Profit** | `Total Revenue - Total Importer Cost` | Gross profit on what we sold. |
 | **Realized Margin %** | `Realized Profit / Total Revenue` | Profitability of the sales mix. |
 | **Avg Profit per Sale** | `Realized Profit / Units Sold` | Quality of each deal, not just volume. |
 
@@ -82,8 +119,8 @@ All measures live in the **`_Measures`** table. They fall into six themes.
 |-----|-----------|----------------|
 | **List Price Total** | `SUMX(Customers, RELATED(Cars[Price for the Customer]))` | What we *should* have collected at list. |
 | **Price Realization %** | `Total Revenue / List Price Total` | How much of list price we actually capture. |
-| **Revenue Leakage** | `List Price Total − Total Revenue` | Money given away through discounting. |
-| **Discounted Sales** | Sales where `Discount applied <> "—"` | How widespread discounting is. |
+| **Revenue Leakage** | `List Price Total - Total Revenue` | Money given away through discounting. |
+| **Discounted Sales** | Sales where `Discount applied <> "-"` | How widespread discounting is. |
 | **Discounted Sales %** | `Discounted Sales / Units Sold` | Share of deals that needed a discount to close. |
 
 ### Inventory & Demand
@@ -124,7 +161,7 @@ attack the biggest, most fixable buckets first.
 
 ---
 
-## Conclusions — How to Increase Revenue
+## Conclusions - How to Increase Revenue
 
 The KPIs above point to four concrete, prioritized levers. Open the relevant page to size each one
 against the live data before acting.
@@ -133,7 +170,7 @@ against the live data before acting.
    `Revenue Leakage` and `Price Realization %` quantify money handed back through discounts. Every
    point of price realization recovered flows **straight to profit** (the car is already sold, so
    cost is fixed). Tighten discount authority on the models and reps with the lowest realization,
-   and set a floor price per model. **This is the fastest win — no new customers required.**
+   and set a floor price per model. **This is the fastest win - no new customers required.**
 
 2. **Recover the lost pipeline (Pipeline & Revenue pages).**
    `Lost Pipeline Value` is the revenue of deals we failed to close. The lost-reason measures show it
@@ -156,7 +193,7 @@ against the live data before acting.
    discount-clear the long-tail stock to free up cash.
 
 **Bottom line:** the largest, lowest-effort gains are (1) reducing discount leakage and
-(2) recovering supply- and follow-up-lost deals — both raise revenue **without** raising spend.
+(2) recovering supply- and follow-up-lost deals - both raise revenue **without** raising spend.
 
 ---
 
@@ -164,7 +201,7 @@ against the live data before acting.
 
 ### Prerequisites
 - **Windows** (Power BI Desktop is Windows-only).
-- **[Power BI Desktop](https://www.microsoft.com/en-us/download/details.aspx?id=58494)** — install the
+- **[Power BI Desktop](https://www.microsoft.com/en-us/download/details.aspx?id=58494)** - install the
   latest version, or get it from the Microsoft Store.
 - The PBIP format is supported out of the box in current Power BI Desktop. (On older builds enable it
   via **File → Options and settings → Options → Preview features → "Power BI Project (.pbip) save
@@ -183,14 +220,14 @@ against the live data before acting.
 
 3. **Point the project at your folder (one setting).**
    All four data queries read from a single Power Query parameter called **`DataFolder`**, so you only
-   change the location in **one** place — no editing of individual queries. Set it to the folder where
+   change the location in **one** place - no editing of individual queries. Set it to the folder where
    you cloned the repo (the folder that contains the `.xlsx` files). Either:
    - In Power BI Desktop: **Transform data → Edit parameters → `DataFolder`**, paste your folder path
      (e.g. `C:\Users\you\car-company`), **or**
    - Edit `CarCompany.SemanticModel/definition/expressions.tmdl` and change the default path on the
      `expression DataFolder = "…"` line before opening.
 
-   > The path must be the **absolute** path to the folder — Power BI Desktop cannot resolve relative
+   > The path must be the **absolute** path to the folder - Power BI Desktop cannot resolve relative
    > paths for file sources. Do **not** include a trailing backslash; the queries add the filename.
 
 4. **Refresh.** Click **Refresh** on the Home ribbon to pull the data from the Excel files.
@@ -198,8 +235,8 @@ against the live data before acting.
 
 > **Note on the Excel files:** `Customers.xlsx`, `Cars.xlsx`, `Potential Customers.xlsx`, and
 > `Workers.xlsx` are the source data. Keep their sheet names intact (`Customers 2025`, `Cars`,
-> `Potential customers`) — the queries reference them by name.
-> **All of this data is fictional and randomly generated — see the disclaimer at the top.**
+> `Potential customers`) - the queries reference them by name.
+> **All of this data is fictional and randomly generated - see the disclaimer at the top.**
 
 ---
 
@@ -207,19 +244,19 @@ against the live data before acting.
 
 ```
 Car Company/
-├── CarCompany.pbip                 # Entry point — open this in Power BI Desktop
+├── CarCompany.pbip                 # Entry point - open this in Power BI Desktop
 ├── CarCompany.Report/              # Report definition (pages & visuals, as JSON)
 │   └── definition/pages/           # 5 pages: sales, pipeline, revenue, inventory, segments
 ├── CarCompany.SemanticModel/       # Data model (TMDL)
 │   └── definition/
 │       ├── tables/                 # Customers, Cars, Potential Customers, Workers, DimDate, _Measures
 │       ├── relationships.tmdl      # Table relationships
-│       ├── expressions.tmdl        # DataFolder parameter — set this to your clone location
+│       ├── expressions.tmdl        # DataFolder parameter - set this to your clone location
 │       └── model.tmdl              # Model-level settings
-├── Cars.xlsx                       # Source data — catalogue, costs, stock
-├── Customers.xlsx                  # Source data — completed sales (2025)
-├── Potential Customers.xlsx        # Source data — lost leads + reasons
-└── Workers.xlsx                    # Source data — staff & payroll
+├── Cars.xlsx                       # Source data - catalogue, costs, stock
+├── Customers.xlsx                  # Source data - completed sales (2025)
+├── Potential Customers.xlsx        # Source data - lost leads + reasons
+└── Workers.xlsx                    # Source data - staff & payroll
 ```
 
 ---
