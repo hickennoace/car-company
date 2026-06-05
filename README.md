@@ -8,6 +8,11 @@ The project is built in the **PBIP (Power BI Project)** format — the report an
 are stored as plain-text `TMDL` / `JSON` files, so the whole thing is fully version-controllable in
 git.
 
+> ⚠️ **Disclaimer:** All data in this project is **completely fictional** and was generated
+> randomly by me for demonstration purposes only. The customer names, phone numbers, sales,
+> staff records, and every other value in the Excel files are **not real** and do not correspond
+> to any real person, vehicle, or company.
+
 ---
 
 ## Table of Contents
@@ -191,6 +196,7 @@ against the live data before acting.
 > **Note on the Excel files:** `Customers.xlsx`, `Cars.xlsx`, `Potential Customers.xlsx`, and
 > `Workers.xlsx` are the source data. Keep their sheet names intact (`Customers 2025`, `Cars`,
 > `Potential customers`) — the queries reference them by name.
+> **All of this data is fictional and randomly generated — see the disclaimer at the top.**
 
 ---
 
