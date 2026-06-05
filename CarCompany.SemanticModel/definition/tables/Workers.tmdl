@@ -82,7 +82,7 @@ table Workers
 		mode: import
 		source =
 				let
-				    Source = Excel.Workbook(File.Contents("C:\Users\danie\Desktop\Car Company\Workers.xlsx"), null, true),
+				    Source = Excel.Workbook(File.Contents(DataFolder & "\Workers.xlsx"), null, true),
 				    Data = Source{[Item="Workers",Kind="Sheet"]}[Data],
 				    Promoted = Table.PromoteHeaders(Data, [PromoteAllScalars=true]),
 				    Rows = Table.SelectRows(Promoted, each [Name] <> null),

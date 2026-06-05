@@ -97,7 +97,7 @@ table Customers
 		mode: import
 		source =
 				let
-				    Source = Excel.Workbook(File.Contents("C:\Users\danie\Desktop\Car Company\Customers.xlsx"), null, true),
+				    Source = Excel.Workbook(File.Contents(DataFolder & "\Customers.xlsx"), null, true),
 				    Data = Source{[Item="Customers 2025",Kind="Sheet"]}[Data],
 				    Promoted = Table.PromoteHeaders(Data, [PromoteAllScalars=true]),
 				    Rows = Table.SelectRows(Promoted, each [Name] <> null),

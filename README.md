@@ -178,19 +178,22 @@ against the live data before acting.
    cd "car-company"
    ```
 
-2. **Fix the data source paths (important).**
-   The three data tables load from **absolute paths** baked into the Power Query (M) scripts, e.g.
-   `C:\Users\danie\Desktop\Car Company\Customers.xlsx`. Unless you cloned to that exact folder, update
-   them to your location. Either:
-   - Open `CarCompany.SemanticModel/definition/tables/*.tmdl` and replace the path in the
-     `File.Contents("…")` line of `Customers.tmdl`, `Cars.tmdl`, and `Potential Customers.tmdl`, **or**
-   - Open the report in Power BI Desktop → **Transform data → Data source settings → Change Source**
-     and point each query at the `.xlsx` files in your clone.
-
-3. **Open the project.** Double-click **`CarCompany.pbip`** (or **File → Open** it from Power BI
+2. **Open the project.** Double-click **`CarCompany.pbip`** (or **File → Open** it from Power BI
    Desktop). The report and semantic model load together.
 
-4. **Refresh.** Click **Refresh** on the Home ribbon to pull the latest data from the Excel files.
+3. **Point the project at your folder (one setting).**
+   All four data queries read from a single Power Query parameter called **`DataFolder`**, so you only
+   change the location in **one** place — no editing of individual queries. Set it to the folder where
+   you cloned the repo (the folder that contains the `.xlsx` files). Either:
+   - In Power BI Desktop: **Transform data → Edit parameters → `DataFolder`**, paste your folder path
+     (e.g. `C:\Users\you\car-company`), **or**
+   - Edit `CarCompany.SemanticModel/definition/expressions.tmdl` and change the default path on the
+     `expression DataFolder = "…"` line before opening.
+
+   > The path must be the **absolute** path to the folder — Power BI Desktop cannot resolve relative
+   > paths for file sources. Do **not** include a trailing backslash; the queries add the filename.
+
+4. **Refresh.** Click **Refresh** on the Home ribbon to pull the data from the Excel files.
    All KPIs recalculate automatically.
 
 > **Note on the Excel files:** `Customers.xlsx`, `Cars.xlsx`, `Potential Customers.xlsx`, and
@@ -211,6 +214,7 @@ Car Company/
 │   └── definition/
 │       ├── tables/                 # Customers, Cars, Potential Customers, Workers, DimDate, _Measures
 │       ├── relationships.tmdl      # Table relationships
+│       ├── expressions.tmdl        # DataFolder parameter — set this to your clone location
 │       └── model.tmdl              # Model-level settings
 ├── Cars.xlsx                       # Source data — catalogue, costs, stock
 ├── Customers.xlsx                  # Source data — completed sales (2025)

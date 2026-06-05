@@ -20,5 +20,7 @@ ref table DimDate
 ref table 'Win-Back Rate'
 ref table _Measures
 
+ref expression DataFolder
+
 ref cultureInfo en-US
 

@@ -109,7 +109,7 @@ table Cars
 		mode: import
 		source =
 				let
-				    Source = Excel.Workbook(File.Contents("C:\Users\danie\Desktop\Car Company\Cars.xlsx"), null, true),
+				    Source = Excel.Workbook(File.Contents(DataFolder & "\Cars.xlsx"), null, true),
 				    Data = Source{[Item="Cars",Kind="Sheet"]}[Data],
 				    Promoted = Table.PromoteHeaders(Data, [PromoteAllScalars=true]),
 				    Rows = Table.SelectRows(Promoted, each [Brand] <> null and [Brand] <> "TOTAL"),
