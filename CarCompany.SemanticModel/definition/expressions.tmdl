@@ -1,7 +1,7 @@
 /// Folder that contains the project's .xlsx data files.
 /// Set this to the location where you cloned/downloaded the repository.
 /// All data queries (Cars, Customers, Potential Customers, Workers) read from here.
-expression DataFolder = "C:\Users\danie\Desktop\Car Company" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+expression DataFolder = "C:\Users\danie\Desktop\Data and Financel Analysis\PowerBI\Car Company" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
 	lineageTag: 4f2a9c1e-7b6d-4e3a-9c0f-1a2b3c4d5e6f
 
 	annotation PBI_NavigationStepName = Navigation
